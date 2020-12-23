@@ -1,0 +1,4 @@
+find the formula to calculate the holding force
+give the conclusion whether the current tools and materials are enough to provide the required force
+
+draw a workflow containing calculator, python, DFA, NX
