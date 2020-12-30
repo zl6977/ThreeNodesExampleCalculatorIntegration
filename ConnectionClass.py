@@ -22,6 +22,7 @@ class ConnectionClass_zzz():
     
     #load condition
     load_duration="1.0"         #will not change in this example
+    end_grain="1.0"             #will not change in this example
     wet_svc_factor="1.0"        #will not change in this example
     temperature="1.0"           #will not change in this example
     submit2_keywords="Calculate+Connection+Capacity"    #will not change in this example
