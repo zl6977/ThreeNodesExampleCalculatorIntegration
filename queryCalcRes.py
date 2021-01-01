@@ -63,7 +63,7 @@ class External_calculator_zzz(ConnectionClass_zzz):
         PARAMS += "temperature="+ self.temperature + "&"
         PARAMS += "submit2_LBS="+ self.submit2_keywords
         return PARAMS
-      
+
     def generate_para_lagScrew(self):
         PARAMS = ""
         PARAMS += "design_method="+ self.design_method + "&"
@@ -86,7 +86,7 @@ class External_calculator_zzz(ConnectionClass_zzz):
         PARAMS += "end_grain="+ self.end_grain + "&"
         PARAMS += "temperature="+ self.temperature + "&"
         PARAMS += "submit2_LLSS="+ self.submit2_keywords
-        return PARAMS 
+        return PARAMS
         
     def generate_para_woodScrew(self):
         PARAMS = ""
@@ -108,7 +108,7 @@ class External_calculator_zzz(ConnectionClass_zzz):
         PARAMS += "end_grain="+ self.end_grain + "&"
         PARAMS += "temperature="+ self.temperature + "&"
         PARAMS += "submit2_LWSS="+ self.submit2_keywords
-        return PARAMS      
+        return PARAMS
 
     def generate_para_nail(self):
         PARAMS = ""
@@ -123,12 +123,15 @@ class External_calculator_zzz(ConnectionClass_zzz):
         PARAMS += "sm_type="+ self.sm_type + "&"
         PARAMS += "sm_thickness="+ self.sm_thickness + "&"
         PARAMS += "sm_thickness_text="+ self.sm_thickness_text + "&"
+        PARAMS += "nail_size="+ self.ConnectionNail.nail_size + "&"
         PARAMS += "fast_dia="+ self.ConnectionNail.fast_dia + "&"
         PARAMS += "ls_length="+ self.ConnectionNail.ls_length + "&"
         PARAMS += "load_duration="+ self.load_duration + "&"
         PARAMS += "wet_svc_factor="+ self.wet_svc_factor + "&"
+        PARAMS += "end_grain="+ self.end_grain + "&"
         PARAMS += "temperature="+ self.temperature + "&"
-        PARAMS += "submit2_LBS="+ self.submit2_keywords      
+        PARAMS += "diaphragm="+ self.diaphragm + "&"
+        PARAMS += "submit2_LNS="+ self.submit2_keywords      
         return PARAMS
         
     def get_Adjusted_ASD_Capacity(self):
@@ -150,17 +153,23 @@ class External_calculator_zzz(ConnectionClass_zzz):
         r = requests.get(url = self.URL, params = PARAMS)         
         #Checking the result
         # print("Result:", r.text)         
-        # Parse the string r.text        
+        # Parse the string r.text     
         index_tmp = r.text.rfind("lbs.") #the last "lbs." as keyword to find the "Adjusted ASD Capacity"
         string_result = r.text[index_tmp-5 : index_tmp]
+        string_tmp = ""
+        # to extract the number from the string
+        for charactor in string_result:
+            if charactor >="0" and charactor <="9":
+                string_tmp += charactor
         # print(r.text)
-        number_result_lbs = float(string_result)
+        number_result_lbs = float(string_tmp)
         number_result = number_result_lbs * 0.45359237  #1 lbs = 0.45359237 kg
         # print(float(number_result))
         return number_result
 
 if __name__ == "__main__":
     instance=External_calculator_zzz()
+    instance.fastener_types="Nail"          #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
 
-    print("The Adjusted_ASD_Capacity of connection is", instance.get_Adjusted_ASD_Capacity(), "kg")
-    print("The Adjusted_ASD_Capacity of connection is", instance.get_Adjusted_ASD_Capacity()/0.45359, "lbs")
+    print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.get_Adjusted_ASD_Capacity(),2), "kg")
+    print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.get_Adjusted_ASD_Capacity()/0.45359237,2), "lbs")
