@@ -1,5 +1,8 @@
 from calculator_AWC_query import External_calculator_zzz
 
+def generate_DFA():
+    #depend on fastener_types to generate different DFA describe the 2 boards and the faster
+
 if __name__ == "__main__":
     instance=External_calculator_zzz()
     instance.fastener_types="Nail"          #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
@@ -42,7 +45,6 @@ if __name__ == "__main__":
     instance.wet_svc_factor="1.0"        #will not change in this example
     instance.temperature="1.0"           #will not change in this example
     instance.submit2_keywords="Calculate+Connection+Capacity"    #will not change in this example
-
 
     print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.get_Adjusted_ASD_Capacity(),2), "kg")
     print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.get_Adjusted_ASD_Capacity()/0.45359237,2), "lbs")
