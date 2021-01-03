@@ -16,6 +16,10 @@ class ConnectionClass_zzz():
     sm_type="Alaska+Cedar"      #inch
     sm_thickness="-1"           #"-1" means user-define value. will not change in this example
     sm_thickness_text="1"       #inch  *IMPORTANT*
+    mm_length="10"                #inch  *IMPORTANT* zl added
+    mm_width="5"                 #inch  *IMPORTANT* zl added
+    sm_length="5"                #inch  *IMPORTANT* zl added
+    sm_width="10"                 #inch  *IMPORTANT* zl added
     
     #connection way
     fastener_types="Bolt"       #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
