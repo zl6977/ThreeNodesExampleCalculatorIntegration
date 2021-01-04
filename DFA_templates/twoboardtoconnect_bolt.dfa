@@ -1,0 +1,68 @@
+#! NX/KF 4.0
+DefClass: twoBoardToConnect_bolt (ug_base_part);
+#CSYS
+(vector parameter) direction: vector(0,0,1);
+(point parameter) start_point: point(0,0,0);
+#the dimensions of the 2 boards
+    (number parameter) L_1: 50;
+    (number parameter) W_1: 30;
+    (number parameter) Th_1: 10;
+    (number parameter) L_2: 30;
+    (number parameter) W_2: 50;
+    (number parameter) Th_2: 10;
+#the position to connect
+    (point parameter) connect_point: point(L_2:/2,W_1:/2,0);
+#the required mechanical performance 
+#   (number parameter) connection strength: ???;
+
+    (number parameter) diameter: 8;
+
+(Child) board1: {
+    class, ug_block;
+    length, L_1:;
+    width, W_1:;
+    height, Th_1:;
+    origin, start_point:;
+};
+
+(Child) board2: {
+    class, ug_block;
+    length, L_2:;
+    width, w_2:;
+    height, Th_2:;
+    origin, point(0, 0, Th_1:) + (start_point: - point(0,0,0));
+};
+
+(Child) holes1: {
+    Class,  ug_cylinder;
+    Origin, connect_point:;
+    Diameter, diameter:;
+    Direction, direction:;
+    Height, Th_1: + Th_2:;
+    Operation, Subtract;
+    target, {board1:};    
+};
+
+(Child) holes2: {
+    Class,  ug_cylinder;
+    Origin, connect_point:;
+    Diameter, diameter:;
+    Direction, direction:;
+    Height, Th_1: + Th_2:;
+    Operation, Subtract;
+    target, {board2:};    
+};
+
+(Child) bolt: {
+    Class,  bolt_zzz;
+    start_point, connect_point: - vector(0,0, 30 - Th_1: - Th_2:);
+    Diameter, diameter:;
+    length_cylinder, 30;
+    length_thread, 20;
+};
+
+(Child) nut: {
+    Class,  nut_zzz;
+    start_point, connect_point: - vector(0,0, 5.3);
+};    
+

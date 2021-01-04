@@ -57,5 +57,5 @@ docs/_build/
 target/
 
 # DFA template
-DFA_templates/
-*.dfa
+#DFA_templates/
+#*.dfa

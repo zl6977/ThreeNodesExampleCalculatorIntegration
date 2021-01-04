@@ -1,0 +1,36 @@
+#! NX/KF 10.0
+DefClass: hammer_zzz (ug_base_part);
+
+(number parameter) height_handle: 200;
+(number parameter) diameter_handle: 20;
+(number parameter) height_head: 100;
+(number parameter) diameter_head: 40;
+(vector parameter) direction: vector(0,0,1);
+(point parameter) start_point: point(0,0,0);
+(Parameter Frame Modifiable) DoorFrame: FrameXY ( start_point:, Vector(0,1,0) * direction:,-Vector(1,0,0) * direction:);
+
+(Child) handle: {
+    Class,  ug_cylinder,
+    Origin, start_point:;
+    Diameter, diameter_handle:;
+    Direction, direction:;
+    Height, height_handle:;
+};
+
+#(Child) head: {
+#    Class,  ug_cylinder,
+#    Origin, Point(0,height_head:/2,height_handle:+diameter_head:/2);
+#    Diameter, diameter_head:;
+#    Direction, vector(0,-1,0);
+#    Height, height_head:;
+#};
+
+(Child) head: {
+    class, ug_block;
+    length, height_head:;
+    width, diameter_head:;
+    height, diameter_head:;
+    origin, point(-height_head:/2 , -diameter_head:/2, height_handle:)+(start_point: - point(0,0,0));
+    #X_Axis,    Vector(0,1,0) * direction:;
+    #Y_Axis,    -Vector(1,0,0) * direction:;
+};
