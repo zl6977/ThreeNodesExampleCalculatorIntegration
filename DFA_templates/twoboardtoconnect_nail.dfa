@@ -1,5 +1,5 @@
 #! NX/KF 4.0
-DefClass: twoBoardToConnect_bolt (ug_base_part);
+DefClass: twoBoardToConnect_nail (ug_base_part);
 #CSYS
 (vector parameter) direction: vector(0,0,1);
 (point parameter) start_point: point(0,0,0);
@@ -11,11 +11,13 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
     (number parameter) W_2: 50;
     (number parameter) Th_2: 10;
 #the position to connect
-    (point parameter) connect_point: point(L_2:/2,W_1:/2,0);
+    (point parameter) connect_point: point(L_2:/2,W_1:/2,Th_1: + Th_2:);
 #the required mechanical performance 
 #   (number parameter) connection strength: ???;
 
-    (number parameter) diameter: 8;
+    (number parameter) diameter_cylinder: 5;
+    (number parameter) length_cylinder: 10;
+    (number parameter) height_wedge: 5;
 
 (Child) board1: {
     class, ug_block;
@@ -36,9 +38,9 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
 (Child) holes1: {
     Class,  ug_cylinder;
     Origin, connect_point:;
-    Diameter, diameter:;
-    Direction, direction:;
-    Height, Th_1: + Th_2:;
+    Diameter, diameter_cylinder:;
+    Direction, -direction:;
+    Height, length_cylinder:;
     Operation, Subtract;
     target, {board1:};    
 };
@@ -46,23 +48,17 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
 (Child) holes2: {
     Class,  ug_cylinder;
     Origin, connect_point:;
-    Diameter, diameter:;
-    Direction, direction:;
-    Height, Th_1: + Th_2:;
+    Diameter, diameter_cylinder:;
+    Direction, -direction:;
+    Height, Th_2:;
     Operation, Subtract;
-    target, {board2:};    
+    target, {board2:};
 };
 
-(Child) bolt: {
-    Class,  bolt_zzz;
-    start_point, connect_point: - vector(0,0, 30 - Th_1: - Th_2:);
-    Diameter, diameter:;
-    length_cylinder, 30;
-    length_thread, 30;
+(Child) nail: {
+    Class,  nail_zzz;
+    start_point, connect_point:-vector(0,0,length_cylinder: + height_wedge:);
+    diameter_cylinder, diameter_cylinder:;
+    length_cylinder, length_cylinder:;
+    height_wedge, height_wedge:;
 };
-
-(Child) nut: {
-    Class,  nut_zzz;
-    start_point, connect_point: - vector(0,0, 5.3);
-};    
-
