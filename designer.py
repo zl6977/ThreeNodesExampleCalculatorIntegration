@@ -1,4 +1,4 @@
-from calculator_AWC_query import External_calculator_zzz
+from Calculator_AWC_query import External_calculator_zzz
 
 #def generate_DFA():
     #depend on fastener_types to generate different DFA describe the 2 boards and the faster

@@ -1,11 +1,75 @@
-from calculator_AWC_query import External_calculator_zzz
+from Calculator_AWC_query import External_calculator_zzz
 
 #def generate_DFA():
     #depend on fastener_types to generate different DFA describe the 2 boards and the faster
 
 def updateTemplate(self):
     # Read the content of the template file
-    f = open(PATH_TO_DFA + "templates\\" + DFA_FILE_NAME, "r")
+    f = open(PATH_TO_DFA + "template\\" + DFA_FILE_NAME, "r")
+    data = f.read()
+    print("data from template:", data)
+
+    data = data.replace("<PARAM1>", str(leg_length))
+    data = data.replace("<PARAM2>", str(leg_side))
+    data = data.replace("<PARAM3>", str(top_lenght))
+    data = data.replace("<PARAM4>", str(top_width))
+    data = data.replace("<PARAM5>", str(top_height))
+
+    f = open(PATH_TO_DFA + DFA_FILE_NAME, "w")
+    f.write(data)
+    f.close()
+    
+def generate_bolt(self,External_calculator_zzz):
+    # Read the content of the template file
+    f = open(PATH_TO_DFA + "template\\" + DFA_FILE_NAME, "r")
+    data = f.read()
+    print("data from template:", data)
+
+    data = data.replace("<PARAM1>", str(leg_length))
+    data = data.replace("<PARAM2>", str(leg_side))
+    data = data.replace("<PARAM3>", str(top_lenght))
+    data = data.replace("<PARAM4>", str(top_width))
+    data = data.replace("<PARAM5>", str(top_height))
+
+    f = open(PATH_TO_DFA + DFA_FILE_NAME, "w")
+    f.write(data)
+    f.close()
+    
+def generate_nail(self,External_calculator_zzz):
+    # Read the content of the template file
+    f = open(PATH_TO_DFA + "template\\" + DFA_FILE_NAME, "r")
+    data = f.read()
+    print("data from template:", data)
+
+    data = data.replace("<PARAM1>", str(leg_length))
+    data = data.replace("<PARAM2>", str(leg_side))
+    data = data.replace("<PARAM3>", str(top_lenght))
+    data = data.replace("<PARAM4>", str(top_width))
+    data = data.replace("<PARAM5>", str(top_height))
+
+    f = open(PATH_TO_DFA + DFA_FILE_NAME, "w")
+    f.write(data)
+    f.close()
+    
+def generate_lag_screw(self,External_calculator_zzz):
+    # Read the content of the template file
+    f = open(PATH_TO_DFA + "template\\" + DFA_FILE_NAME, "r")
+    data = f.read()
+    print("data from template:", data)
+
+    data = data.replace("<PARAM1>", str(leg_length))
+    data = data.replace("<PARAM2>", str(leg_side))
+    data = data.replace("<PARAM3>", str(top_lenght))
+    data = data.replace("<PARAM4>", str(top_width))
+    data = data.replace("<PARAM5>", str(top_height))
+
+    f = open(PATH_TO_DFA + DFA_FILE_NAME, "w")
+    f.write(data)
+    f.close()
+    
+def generate_wood_screw(self,External_calculator_zzz):
+    # Read the content of the template file
+    f = open(PATH_TO_DFA + "template\\" + DFA_FILE_NAME, "r")
     data = f.read()
     print("data from template:", data)
 

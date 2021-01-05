@@ -1,7 +1,7 @@
 #! NX/KF 10.0
 DefClass: nail_zzz (ug_base_part);
 
-(number parameter) height_top: 4;
+(number parameter) height_top: 2;
 (number parameter) diameter_top: 10;
 (number parameter) diameter_cylinder: 5;
 (number parameter) length_cylinder: 30;

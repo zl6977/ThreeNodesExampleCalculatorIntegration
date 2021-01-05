@@ -1,0 +1,12 @@
+mklink /H twoboardtoconnect_bolt.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\twoboardtoconnect_bolt.dfa"
+mklink /H twoboardtoconnect_glue.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\twoboardtoconnect_glue.dfa"
+mklink /H twoboardtoconnect_lagScrew.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\twoboardtoconnect_lagScrew.dfa"
+mklink /H twoboardtoconnect_woodScrew.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\twoboardtoconnect_woodScrew.dfa"
+mklink /H twoboardtoconnect_nail.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\twoboardtoconnect_nail.dfa"
+
+mklink /H bolt.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\bolt.dfa"
+mklink /H nail.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\nail.dfa"
+mklink /H nut.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\nut.dfa"
+mklink /H wood_screw.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\wood_screw.dfa"
+mklink /H lag_screw.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\lag_screw.dfa"
+mklink /H hammer.dfa "C:\Users\lianz\Google Drive\Huawei matebook 14\NTNU\Courses\TM4270-KBE introduction\NX-KF\template\hammer.dfa"
