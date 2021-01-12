@@ -1,9 +1,9 @@
 #! NX/KF 10.0
 DefClass: nail_zzz (ug_base_part);
 
-(number parameter) height_top: 2;
-(number parameter) diameter_top: 10;
 (number parameter) diameter_cylinder: 5;
+(number parameter) diameter_top: diameter_cylinder:*2;
+(number parameter) height_top: diameter_cylinder: * 0.4;
 (number parameter) length_cylinder: 30;
 (number parameter) height_wedge: 5;
 (vector parameter) direction: vector(0,0,1);
@@ -30,7 +30,7 @@ DefClass: nail_zzz (ug_base_part);
 (Child) wedge: 
 { 
     Class, ug_cone; 
-    Base_Diameter, 0.1; 
+    Base_Diameter, 0.01*diameter_cylinder:; 
     Top_Diameter, diameter_cylinder:; 
     Direction, direction:; 
     Height, height_wedge:;

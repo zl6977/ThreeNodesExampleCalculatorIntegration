@@ -6,6 +6,8 @@
 class ConnectionClass_zzz():
     design_method="ASD"         #zl: allowable stress design. will not change in this example
     connection_type="Lateral+loading"   #zl: withdrawal loading. will not change in this example
+    connection_capacity="0.1"      #labs.
+    connection_requirement="1"   #labs.
     
     #the two boards
     mm_type="Alaska+Cedar"      #zl: different types have different density. will not change in this example
@@ -41,6 +43,6 @@ class ConnectionClass_zzz():
         fast_dia="0.151"        #inch *IMPORTANT*
         ls_length="2"           #inch *IMPORTANT*
     class ConnectionNail():
-        ls_length="2"           #inch *IMPORTANT*
+        # ls_length="2"           #inch *IMPORTANT*
         fast_dia="sinker"       #common wire, sinker, box  *IMPORTANT*
         nail_size="7d"          #6 7 8 10 12 16 20 30 40   *IMPORTANT*

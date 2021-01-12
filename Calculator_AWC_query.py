@@ -125,7 +125,7 @@ class External_calculator_zzz(ConnectionClass_zzz):
         PARAMS += "sm_thickness_text="+ self.sm_thickness_text + "&"
         PARAMS += "nail_size="+ self.ConnectionNail.nail_size + "&"
         PARAMS += "fast_dia="+ self.ConnectionNail.fast_dia + "&"
-        PARAMS += "ls_length="+ self.ConnectionNail.ls_length + "&"
+        # PARAMS += "ls_length="+ self.ConnectionNail.ls_length + "&"
         PARAMS += "load_duration="+ self.load_duration + "&"
         PARAMS += "wet_svc_factor="+ self.wet_svc_factor + "&"
         PARAMS += "end_grain="+ self.end_grain + "&"
@@ -134,7 +134,7 @@ class External_calculator_zzz(ConnectionClass_zzz):
         PARAMS += "submit2_LNS="+ self.submit2_keywords      
         return PARAMS
         
-    def get_Adjusted_ASD_Capacity(self):
+    def update_Adjusted_ASD_Capacity(self):
         #1. generate params
         PARAMS = ""
         if self.fastener_types == "Bolt":
@@ -162,6 +162,7 @@ class External_calculator_zzz(ConnectionClass_zzz):
             if charactor >="0" and charactor <="9":
                 string_tmp += charactor
         # print(r.text)
+        self.connection_capacity = string_tmp   #update the value in class
         number_result_lbs = float(string_tmp)
         number_result = number_result_lbs * 0.45359237  #1 lbs = 0.45359237 kg
         # print(float(number_result))
@@ -171,5 +172,5 @@ if __name__ == "__main__":
     instance=External_calculator_zzz()
     instance.fastener_types="Nail"          #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
 
-    print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.get_Adjusted_ASD_Capacity(),2), "kg")
-    print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.get_Adjusted_ASD_Capacity()/0.45359237,2), "lbs")
+    print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.update_Adjusted_ASD_Capacity(),2), "kg")
+    print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.update_Adjusted_ASD_Capacity()/0.45359237,2), "lbs")

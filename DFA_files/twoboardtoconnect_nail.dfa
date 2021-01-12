@@ -4,20 +4,21 @@ DefClass: twoBoardToConnect_nail (ug_base_part);
 (vector parameter) direction: vector(0,0,1);
 (point parameter) start_point: point(0,0,0);
 #the dimensions of the 2 boards
-    (number parameter) L_1: 50;
-    (number parameter) W_1: 30;
-    (number parameter) Th_1: 10;
-    (number parameter) L_2: 30;
-    (number parameter) W_2: 50;
-    (number parameter) Th_2: 10;
+    (number parameter) L_1: 10;
+    (number parameter) W_1: 20;
+    (number parameter) Th_1: 1;
+    (number parameter) L_2: 20;
+    (number parameter) W_2: 10;
+    (number parameter) Th_2: 1;
 #the position to connect
-    (point parameter) connect_point: point(L_2:/2,W_1:/2,Th_1: + Th_2:);
+    (point parameter) connect_point: point(min(L_1:, L_2:)/2,min(W_1:, W_2:)/2,Th_1: + Th_2:);
 #the required mechanical performance 
-#   (number parameter) connection strength: ???;
+    (number parameter) connection_capacity: 52;
+    (number parameter) connection_requirement: 1;
 
-    (number parameter) diameter_cylinder: 5;
-    (number parameter) length_cylinder: 10;
-    (number parameter) height_wedge: 5;
+    (number parameter) diameter_cylinder: 0.099;
+    (number parameter) length_cylinder: 2.025;
+    (number parameter) height_wedge: 0.225;
 
 (Child) board1: {
     class, ug_block;
@@ -35,26 +36,6 @@ DefClass: twoBoardToConnect_nail (ug_base_part);
     origin, point(0, 0, Th_1:) + (start_point: - point(0,0,0));
 };
 
-(Child) holes1: {
-    Class,  ug_cylinder;
-    Origin, connect_point:;
-    Diameter, diameter_cylinder:;
-    Direction, -direction:;
-    Height, length_cylinder:;
-    Operation, Subtract;
-    target, {board1:};    
-};
-
-(Child) holes2: {
-    Class,  ug_cylinder;
-    Origin, connect_point:;
-    Diameter, diameter_cylinder:;
-    Direction, -direction:;
-    Height, Th_2:;
-    Operation, Subtract;
-    target, {board2:};
-};
-
 (Child) nail: {
     Class,  nail_zzz;
     start_point, connect_point:-vector(0,0,length_cylinder: + height_wedge:);
@@ -62,3 +43,12 @@ DefClass: twoBoardToConnect_nail (ug_base_part);
     length_cylinder, length_cylinder:;
     height_wedge, height_wedge:;
 };
+
+(Child) body_colored: {
+    Class, ug_body; 
+    Feature, {board2:};
+    color,  if(connection_capacity: < connection_requirement:) then ug_askClosestColor(RED) 
+       else if(connection_capacity: > connection_requirement:) then ug_askClosestColor(GREEN)
+       else ug_askClosestColor(YELLOW); 
+};
+

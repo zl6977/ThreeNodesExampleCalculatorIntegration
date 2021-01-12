@@ -1,0 +1,109 @@
+#! NX/KF 10.0
+DefClass: bolt_1_4_zzz (ug_base_part);
+
+(number parameter) diameter: 0.25;
+
+(number parameter) head_thickness: 0.163;
+(number parameter) width_across_flats: 0.438;
+(number parameter) head_dimension: width_across_flats:/1.732;
+(number parameter) length_cylinder: 1;
+(number parameter) length_thread: length_cylinder:*0.8;
+(number parameter) threads_peer_inch: 20;
+(number parameter) pitch: 1/threads_peer_inch:;
+
+(number parameter) turn: length_thread:/pitch:;
+(integer parameter) num_point_total: round(100*turn:);
+(vector parameter) direction: vector(0,0,1);
+(point parameter) start_point: point(0,0,0);
+
+
+(Child) spanner: 
+{ 
+    Class, ug_extruded; 
+    Start_Limit, 0; 
+    End_Limit, head_thickness:; 
+    Direction, direction:; 
+    profile, sec_spanner:;
+#   profile, {nth(1, sec_spanner:), nth(2, sec_spanner:), nth(3, sec_spanner:), nth(4, sec_spanner:), nth(5, sec_spanner:), nth(6, sec_spanner:)};
+};
+
+(Child list) sec_spanner: 
+{ 
+    Class, ug_line; 
+    quantity, 6;    
+    Start_Point, point(head_dimension: * cos(60*(child:index:-1)), head_dimension: * sin(60*(child:index:-1)), length_cylinder:)+(start_point: - point(0,0,0)); 
+    End_Point, point(head_dimension: * cos(60*child:index:), head_dimension: * sin(60*child:index:), length_cylinder:)+(start_point: - point(0,0,0)); 
+};
+
+(Child) cylinder: {
+    Class,  ug_cylinder,
+    Origin, start_point:;
+    Diameter, diameter:;
+    Direction, direction:;
+    Height, length_cylinder:;
+};
+
+(list) ex_points_zzz: loop
+{
+  for $n from 0 to num_point_total: -1;
+    for $delta_theta is (360*turn:) / (num_point_total: -1);
+    for $delta_z is (length_thread: )/ (num_point_total: -1); # +0.01*length_thread: for the starting end of the thread
+    for $pt is Point(diameter:/2 *cos($n*$delta_theta), diameter:/2 *sin($n*$delta_theta), $n*$delta_z -0.01*length_thread:) + (start_point: - point(0,0,0));
+#    do printValue($pt);
+    collect {$pt};
+};
+
+#(Child) ex_spline_cntl: {
+#    Class,          ug_spline_cntl,
+#    Points,         ex_points_zzz:
+#};
+#
+##(child) circle_sec_o: { 
+##  class, ug_arc;
+##  radius, 0.5;
+###  start_angle, 0;
+###  end_angle, 360;
+##  center, point(diameter:/2,0,0);
+##  X_Axis, Vector(1,0,0);
+##  Y_Axis, Vector(0,0,1);
+##};
+#
+#(child) line1: { 
+#    Class, ug_line; 
+#    Start_Point, point(diameter:/2-pitch:/2*1.732,0,0-0.01*length_thread:) + (start_point: - point(0,0,0)); 
+#    End_Point, point(diameter:/2+1.732, 0, pitch:/2+1-0.01*length_thread:) + (start_point: - point(0,0,0)); 
+#};
+#
+#(child) line2: { 
+#    Class, ug_line; 
+#    Start_Point, point(diameter:/2+1.732, 0, pitch:/2+1-0.01*length_thread:) + (start_point: - point(0,0,0)); 
+#    End_Point, point(diameter:/2+1.732, 0, -pitch:/2-1-0.01*length_thread:) + (start_point: - point(0,0,0)); 
+#};
+#
+#(child) line3: { 
+#    Class, ug_line; 
+#    Start_Point, point(diameter:/2+1.732, 0, -pitch:/2-1-0.01*length_thread:) + (start_point: - point(0,0,0)); 
+#    End_Point, point(diameter:/2-pitch:/2*1.732,0,0-0.01*length_thread:) + (start_point: - point(0,0,0)); 
+#};
+#
+#(child) thread_profile: {
+#  Class, ug_curve_join;
+#  profile, {line1:, line2:, line3:};
+#  #join_method, POLYNOMIAL;
+#  Suppress_Children?, true;
+#};
+#
+#(child) threads: {
+#  class, ug_swept;
+#  guide, {{forward, ex_spline_cntl:}};
+#  section, {{forward, thread_profile:}};
+##  section, {{forward, circle_sec_o:}};
+#  scaling, {scale_constant, 1};
+#  alignment_init, Parameter;
+#  orientation, {Orientation_Vector , Vector(0,0,1)};
+#  Body_Type, Solid;
+#  
+#  tolerances, {0, 0, 0};
+#  Operation, Subtract;
+#  target, {cylinder:};
+#};
