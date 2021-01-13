@@ -5,20 +5,20 @@ DefClass: twoBoardToConnect_nail (ug_base_part);
 (point parameter) start_point: point(0,0,0);
 #the dimensions of the 2 boards
     (number parameter) L_1: 10;
-    (number parameter) W_1: 20;
-    (number parameter) Th_1: 1;
-    (number parameter) L_2: 20;
+    (number parameter) W_1: 5;
+    (number parameter) Th_1: 2;
+    (number parameter) L_2: 5;
     (number parameter) W_2: 10;
-    (number parameter) Th_2: 1;
+    (number parameter) Th_2: 0.2;
 #the position to connect
     (point parameter) connect_point: point(min(L_1:, L_2:)/2,min(W_1:, W_2:)/2,Th_1: + Th_2:);
 #the required mechanical performance 
-    (number parameter) connection_capacity: 52;
+    (number parameter) connection_capacity: 6;
     (number parameter) connection_requirement: 1;
 
     (number parameter) diameter_cylinder: 0.099;
-    (number parameter) length_cylinder: 2.025;
-    (number parameter) height_wedge: 0.225;
+    (number parameter) length_cylinder: 1.8;
+    (number parameter) height_wedge: 0.2;
 
 (Child) board1: {
     class, ug_block;

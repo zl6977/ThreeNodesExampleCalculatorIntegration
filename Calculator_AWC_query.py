@@ -147,13 +147,13 @@ class External_calculator_zzz(ConnectionClass_zzz):
             PARAMS = self.generate_para_nail()
         else:
             print("fastener_types error")
-            pass        
+            pass
         
         # sending get request and saving the response as response object
         r = requests.get(url = self.URL, params = PARAMS)         
         #Checking the result
-        # print("Result:", r.text)         
-        # Parse the string r.text     
+        # print("Result:", r.text)
+        # Parse the string r.text
         index_tmp = r.text.rfind("lbs.") #the last "lbs." as keyword to find the "Adjusted ASD Capacity"
         string_result = r.text[index_tmp-5 : index_tmp]
         string_tmp = ""
@@ -161,12 +161,13 @@ class External_calculator_zzz(ConnectionClass_zzz):
         for charactor in string_result:
             if charactor >="0" and charactor <="9":
                 string_tmp += charactor
-        # print(r.text)
-        self.connection_capacity = string_tmp   #update the value in class
-        number_result_lbs = float(string_tmp)
-        number_result = number_result_lbs * 0.45359237  #1 lbs = 0.45359237 kg
-        # print(float(number_result))
-        return number_result
+        try:
+            number_result_lbs = float(string_tmp)
+            number_result = number_result_lbs * 0.45359237  #1 lbs = 0.45359237 kg
+            self.connection_capacity = string_tmp   #update the value in class
+            return number_result
+        except ValueError:
+            print("Query ERROR: result is:", r.text[index_tmp-500 : index_tmp+50])
 
 if __name__ == "__main__":
     instance=External_calculator_zzz()

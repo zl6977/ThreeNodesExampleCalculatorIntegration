@@ -41,32 +41,22 @@ def generate_bolt(ins_connection, PATH_TO_DFA, DFA_FILE_NAME):
     data = data.replace("<sm_length>", str(ins_connection.sm_length))
     data = data.replace("<sm_width>", str(ins_connection.sm_width))
     
-    data = data.replace("<fast_dia>", str(ins_connection.ConnectionBlot.fast_dia))
+    # bolt_num = []        
+    # head_thickness = []
+    # nut_thickness = []
+    # threads_peer_inch = [20,18,16,14,13,11,10,9,8]
     
-    if ins_connection.ConnectionBlot.fast_dia == "0.25":
-        PARAMS_type = "_1_4"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.3125":
-        PARAMS_type = "_5_16"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.375":
-        PARAMS_type = "_3_8"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.4375":
-        PARAMS_type = "_7_16"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.5":
-        PARAMS_type = "_1_2"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.625":
-        PARAMS_type = "_5_8"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.75":
-        PARAMS_type = "_3_4"
-    elif ins_connection.ConnectionBlot.fast_dia == "0.875":
-        PARAMS_type = "_7_8"
-    elif ins_connection.ConnectionBlot.fast_dia == "1":
-        PARAMS_type = "_1_1"
-    else:
+    shank_dia = ["0.25","0.3125","0.375","0.4375","0.5","0.625","0.75","0.875","1"]
+    PARAMS_type = ["_1_4","_5_16","_3_8","_7_16","_1_2","_5_8","_3_4","_7_8","_1_1"]
+    try:
+        i = shank_dia.index(ins_connection.ConnectionBlot.fast_dia)
+    except ValueError:
         print("bolt type error")
-        pass
-        
-    data = data.replace("<bolt_type>", "bolt" + PARAMS_type + "_zzz")
-    data = data.replace("<nut_type>", "nut" + PARAMS_type + "_zzz")
+        return
+    
+    data = data.replace("<fast_dia>", str(ins_connection.ConnectionBlot.fast_dia))
+    data = data.replace("<bolt_type>", "bolt" + PARAMS_type[i] + "_zzz")
+    data = data.replace("<nut_type>", "nut" + PARAMS_type[i] + "_zzz")
 
     f = open(PATH_TO_DFA + "\\" + DFA_FILE_NAME, "w")
     f.write(data)
@@ -88,40 +78,18 @@ def generate_nail(ins_connection, PATH_TO_DFA, DFA_FILE_NAME):
     data = data.replace("<sm_length>", str(ins_connection.sm_length))
     data = data.replace("<sm_width>", str(ins_connection.sm_width))
 
-    if ins_connection.ConnectionNail.nail_size == "6d":
-        PARAMS_nail_size = 0.099
-        PARAMS_ls_length = 2
-    elif ins_connection.ConnectionNail.nail_size == "7d":
-        PARAMS_nail_size = 0.099
-        PARAMS_ls_length = 2.25
-    elif ins_connection.ConnectionNail.nail_size == "8d":
-        PARAMS_nail_size = 0.113
-        PARAMS_ls_length = 2.5
-    elif ins_connection.ConnectionNail.nail_size == "10d":
-        PARAMS_nail_size = 0.128
-        PARAMS_ls_length = 3
-    elif ins_connection.ConnectionNail.nail_size == "12d":
-        PARAMS_nail_size = 0.128
-        PARAMS_ls_length = 3.25
-    elif ins_connection.ConnectionNail.nail_size == "16d":
-        PARAMS_nail_size = 0.135
-        PARAMS_ls_length = 3.5
-    elif ins_connection.ConnectionNail.nail_size == "20d":
-        PARAMS_nail_size = 0.148
-        PARAMS_ls_length = 4
-    elif ins_connection.ConnectionNail.nail_size == "30d":
-        PARAMS_nail_size = 0.148
-        PARAMS_ls_length = 4.5
-    elif ins_connection.ConnectionNail.nail_size == "40d":
-        PARAMS_nail_size = 0.162
-        PARAMS_ls_length = 5
-    else:
+    nail_size_list = ["6d","7d","8d","10d","12d","16d","20d","30d","40d"]
+    PARAMS_nail_size = [0.099,0.099,0.113,0.128,0.128,0.135,0.148,0.148,0.162]
+    PARAMS_ls_length = [2,2.25,2.5,3,3.25,3.5,4,4.5,5]
+    try:
+        i = nail_size_list.index(ins_connection.ConnectionNail.nail_size)
+    except ValueError:
         print("nail type error")
-        pass
+        return
         
-    data = data.replace("<nail_size>", str(PARAMS_nail_size))
-    data = data.replace("<ls_length_09>", str(PARAMS_ls_length * 0.9))
-    data = data.replace("<ls_length_01>", str(PARAMS_ls_length * 0.1))
+    data = data.replace("<nail_size>", str(PARAMS_nail_size[i]))
+    data = data.replace("<ls_length_09>", str(PARAMS_ls_length[i] * 0.9))
+    data = data.replace("<ls_length_01>", str(PARAMS_ls_length[i] * 0.1))
 
     f = open(PATH_TO_DFA + "\\" + DFA_FILE_NAME, "w")
     f.write(data)
@@ -173,24 +141,24 @@ if __name__ == "__main__":
     instance.ConnectionWoodScrew.ls_length="2"          #inch *IMPORTANT*
     
     instance.ConnectionNail.fast_dia="sinker"       #common wire, sinker, box  *IMPORTANT*
-    instance.ConnectionNail.nail_size="7d"          #6 7 8 10 12 16 20 30 40   *IMPORTANT*
+    instance.ConnectionNail.nail_size="6d"          #6 7 8 10 12 16 20 30 40   *IMPORTANT*
 
     #the two boards
     instance.mm_type="Alaska+Cedar"      #zl: different types have different density. will not change in this example
     instance.mm_thickness="-1"           #"-1" means user-define value. will not change in this example
-    instance.mm_thickness_text="1"       #inch  *IMPORTANT*
+    instance.mm_thickness_text="2"       #inch  *IMPORTANT* the downside one
     instance.theta_angle_mm="0"          #angle between grain and load. will not change in this example
     instance.theta_angle_sm="0"          #angle between grain and load. will not change in this example
     instance.sm_type="Alaska+Cedar"      #inch
     instance.sm_thickness="-1"           #"-1" means user-define value. will not change in this example
-    instance.sm_thickness_text="1"       #inch  *IMPORTANT*
+    instance.sm_thickness_text="0.2"       #inch  *IMPORTANT*
 
 #----------------------------------------------------
     instance.design_method="ASD"         #zl: allowable stress design. will not change in this example
     instance.connection_type="Lateral+loading"   #zl: withdrawal loading. will not change in this example
     
     #connection way
-    instance.fastener_types="Bolt"       #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
+    instance.fastener_types="Nail"       #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
     instance.loading_scenario="Single+Shear" #"Single+Shear" for default. will not change in this example
     
     #load condition
