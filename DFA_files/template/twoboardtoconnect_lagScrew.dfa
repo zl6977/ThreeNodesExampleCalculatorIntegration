@@ -15,11 +15,15 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 #the required mechanical performance 
     (number parameter) connection_capacity: <connection_capacity>;
     (number parameter) connection_requirement: <connection_requirement>;
-
-    (number parameter) diameter_cylinder: 5;
-    (number parameter) length_cylinder: 15;
+    
+    (number parameter) diameter_cylinder: <diameter_lag_screw>;
+    (number parameter) length_cylinder: <ls_length_08>;
     (number parameter) length_thread: length_cylinder:/3*2;
-    (number parameter) height_wedge: 5;
+    (number parameter) height_wedge: <ls_length_02>;
+    
+    (number parameter) outter_dia_washer: 2*diameter_cylinder:;
+    (number parameter) inner_dia_washer: diameter_cylinder:;
+    (number parameter) thickness_washer: <wash_thickness>;
 
 (Child) board1: {
     class, ug_block;
@@ -37,7 +41,7 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     origin, point(0, 0, Th_1:) + (start_point: - point(0,0,0));
 };
 
-(Child) holes1: {
+(Child) hole1: {
     Class,  ug_cylinder;
     Origin, connect_point:;
     Diameter, diameter_cylinder:;
@@ -47,7 +51,7 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     target, {board1:};    
 };
 
-(Child) holes2: {
+(Child) hole2: {
     Class,  ug_cylinder;
     Origin, connect_point:;
     Diameter, diameter_cylinder:;
@@ -58,10 +62,28 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 };
 
 (Child) lag_screw: {
-    Class,  lag_screw_zzz;
-    start_point, connect_point:-vector(0,0,length_cylinder: + height_wedge:);
-    diameter_cylinder, diameter_cylinder:;
+    Class, lag_screw_zzz;
+    start_point, connect_point:-vector(0,0, length_cylinder: + height_wedge: - thickness_washer:);
+    diameter, diameter_cylinder:;
     length_cylinder, length_cylinder:;
     length_thread, length_thread:;
     height_wedge, height_wedge:;
+};
+
+(Child) washer: {
+    Class,  ug_cylinder;
+    Origin, connect_point:;
+    Diameter, outter_dia_washer:;
+    Height, thickness_washer:;
+    Direction, direction:;
+};
+
+(Child) hole3: {
+    Class,  ug_cylinder;
+    Origin, connect_point:;
+    Diameter, inner_dia_washer:;
+    Height, thickness_washer:;
+    Direction, direction:;
+    Operation, Subtract;
+    target, {washer:};
 };

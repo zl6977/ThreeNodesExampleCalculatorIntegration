@@ -99,14 +99,32 @@ def generate_lag_screw(ins_connection, PATH_TO_DFA, DFA_FILE_NAME):
     # Read the content of the template file
     f = open(PATH_TO_DFA + "\\template\\" + DFA_FILE_NAME, "r")
     data = f.read()
-    print("data from template:", data)
+    # print("data from template:", data)
 
-    # data = data.replace("<PARAM1>", str(leg_length))
-    # data = data.replace("<PARAM2>", str(leg_side))
-    # data = data.replace("<PARAM3>", str(top_lenght))
-    # data = data.replace("<PARAM4>", str(top_width))
-    # data = data.replace("<PARAM5>", str(top_height))
+    data = data.replace("<mm_thickness_text>", str(ins_connection.mm_thickness_text))
+    data = data.replace("<sm_thickness_text>", str(ins_connection.sm_thickness_text))
+    data = data.replace("<connection_capacity>", str(ins_connection.connection_capacity))
+    data = data.replace("<connection_requirement>", str(ins_connection.connection_requirement))
 
+    data = data.replace("<mm_length>", str(ins_connection.mm_length))
+    data = data.replace("<mm_width>", str(ins_connection.mm_width))
+    data = data.replace("<sm_length>", str(ins_connection.sm_length))
+    data = data.replace("<sm_width>", str(ins_connection.sm_width))
+    
+    fast_dia_list = ["0.25","0.3125","0.375","0.4375","0.5","0.625","0.75","0.875","1"]
+    PARAMS_outter_dia_washer = [0.489,0.586,0.683,0.779,0.873,0.971,1.079,1.176,1.271,1.367,1.464,1.560,1.661]
+    try:
+        i = fast_dia_list.index(ins_connection.ConnectionLagScrew.fast_dia)
+    except ValueError:
+        print("lag screw type error")
+        return
+    
+    data = data.replace("<diameter_lag_screw>", str(ins_connection.ConnectionLagScrew.fast_dia))
+    data = data.replace("<outter_dia_washer>", str(PARAMS_outter_dia_washer[i]))
+    data = data.replace("<ls_length_08>", str(float(ins_connection.ConnectionLagScrew.ls_length) * 0.8))
+    data = data.replace("<ls_length_02>", str(float(ins_connection.ConnectionLagScrew.ls_length) * 0.2))
+    data = data.replace("<wash_thickness>", str(ins_connection.ConnectionLagScrew.wash_thickness))
+    
     f = open(PATH_TO_DFA + "\\" + DFA_FILE_NAME, "w")
     f.write(data)
     f.close()
@@ -158,7 +176,7 @@ if __name__ == "__main__":
     instance.connection_type="Lateral+loading"   #zl: withdrawal loading. will not change in this example
     
     #connection way
-    instance.fastener_types="Nail"       #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
+    instance.fastener_types="Lag+Screw"       #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
     instance.loading_scenario="Single+Shear" #"Single+Shear" for default. will not change in this example
     
     #load condition

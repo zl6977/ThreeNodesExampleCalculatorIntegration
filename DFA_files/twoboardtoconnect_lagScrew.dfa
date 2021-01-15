@@ -4,21 +4,23 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 (vector parameter) direction: vector(0,0,1);
 (point parameter) start_point: point(0,0,0);
 #the dimensions of the 2 boards
-    (number parameter) L_1: 50;
-    (number parameter) W_1: 30;
-    (number parameter) Th_1: 10;
-    (number parameter) L_2: 30;
-    (number parameter) W_2: 50;
-    (number parameter) Th_2: 10;
+    (number parameter) L_1: 10;
+    (number parameter) W_1: 5;
+    (number parameter) Th_1: 2;
+    (number parameter) L_2: 5;
+    (number parameter) W_2: 10;
+    (number parameter) Th_2: 0.2;
 #the position to connect
-    (point parameter) connect_point: point(L_2:/2,W_1:/2,Th_1: + Th_2:);
+    (point parameter) connect_point: point(min(L_1:, L_2:)/2,min(W_1:, W_2:)/2,Th_1: + Th_2:);
 #the required mechanical performance 
-#   (number parameter) connection strength: ???;
-
-    (number parameter) diameter_cylinder: 5;
-    (number parameter) length_cylinder: 15;
+    (number parameter) connection_capacity: 12;
+    (number parameter) connection_requirement: 1;
+    
+    (number parameter) diameter_cylinder: 0.25;
+    (number parameter) length_cylinder: 2.0;
     (number parameter) length_thread: length_cylinder:/3*2;
     (number parameter) height_wedge: 5;
+    (number parameter) thickness_washer: 0.125;
 
 (Child) board1: {
     class, ug_block;
@@ -37,6 +39,7 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 };
 
 (Child) holes1: {
+(Child) hole1: {
     Class,  ug_cylinder;
     Origin, connect_point:;
     Diameter, diameter_cylinder:;
@@ -47,6 +50,7 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 };
 
 (Child) holes2: {
+(Child) hole2: {
     Class,  ug_cylinder;
     Origin, connect_point:;
     Diameter, diameter_cylinder:;
@@ -57,10 +61,28 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 };
 
 (Child) lag_screw: {
-    Class,  lag_screw_zzz;
-    start_point, connect_point:-vector(0,0,length_cylinder: + height_wedge:);
-    diameter_cylinder, diameter_cylinder:;
+    Class, lag_screw_zzz;
+    start_point, connect_point:-vector(0,0, length_cylinder: + height_wedge: - thickness_washer:);
+    diameter, diameter_cylinder:;
     length_cylinder, length_cylinder:;
     length_thread, length_thread:;
     height_wedge, height_wedge:;
+};
+
+(Child) washer: {
+    Class,  ug_cylinder;
+    Origin, connect_point:;
+    Diameter, outter_dia_washer:;
+    Height, thickness_washer:;
+    Direction, direction:;
+};
+
+(Child) hole3: {
+    Class,  ug_cylinder;
+    Origin, connect_point:;
+    Diameter, inner_dia_washer:;
+    Height, thickness_washer:;
+    Direction, direction:;
+    Operation, Subtract;
+    target, {washer:};
 };

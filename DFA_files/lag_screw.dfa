@@ -1,23 +1,30 @@
 #! NX/KF 10.0
 DefClass: lag_screw_zzz (ug_base_part);
+(number parameter) diameter: 0.25;                          #!!!
+(number parameter) length_toltal: 10*diameter:;             #!!!
+(number parameter) height_wedge: diameter: *sin(60);
+(number parameter) length_cylinder: length_toltal: - height_wedge:;
+(number parameter) length_thread: length_toltal:/4*3;
 
-(number parameter) height_top: 4;
-(number parameter) diameter_top: 10;
-
-(number parameter) head_thickness: 4;
-(number parameter) head_dimension: 8/1.732;
-
-(number parameter) diameter: 5;
-(number parameter) length_cylinder: 30;
-(number parameter) length_thread: 20;
-(number parameter) height_wedge: 5;
 (vector parameter) direction: vector(0,0,1);
 (point parameter) start_point: point(0,0,0);
 
-(number parameter) pitch: 1.25;
-(number parameter) turn: length_thread:/pitch:;
-(integer parameter) num_point_total: round(100*turn:);
+(number parameter) head_thickness: nth(getIndex:(diameter_list:, diameter:), head_thickness_list:);
+(number parameter) width_across_flats: nth(getIndex:(diameter_list:, diameter:), width_across_flats_list:);
+(number parameter) head_dimension: width_across_flats: /2 /sin(60) ;
 
+(number parameter) threads_per_inch: nth(getIndex:(diameter_list:, diameter:), threads_per_inch_list:);
+(number parameter) pitch: 1/threads_per_inch:;
+(number parameter) turn: length_thread:/pitch:;
+(integer parameter) num_point_total: round(200*turn:);
+(number parameter) turn_extra: 0.5;
+(number parameter) cut_depth: pitch:*sin(60)-pitch:/8*sin(60);
+
+
+(list parameter)    diameter_list: {0.25, 0.3125, 0.375, 0.4375, 0.5, 0.625, 0.75, 0.875, 1};
+(list parameter)    threads_per_inch_list: {10, 9, 7, 7, 6, 5, 4.5, 4, 3.5};
+(list parameter)    width_across_flats_list: {7/16, 1/2, 9/16, 5/8, 3/4, 15/16, 9/8, 21/16, 3/2};
+(list parameter)    head_thickness_list: {11/64, 7/32, 1/4, 19/64, 11/32, 27/64, 1/2, 37/64, 43/64};
 
 (Child) spanner: 
 { 
@@ -31,13 +38,13 @@ DefClass: lag_screw_zzz (ug_base_part);
 (Child list) sec_spanner: 
 { 
     Class, ug_line; 
-    quantity, 6;    
+    quantity, 6;
     Start_Point, point(head_dimension: * cos(60*(child:index:-1)), head_dimension: * sin(60*(child:index:-1)), length_cylinder: + height_wedge:)+(start_point: - point(0,0,0)); 
     End_Point, point(head_dimension: * cos(60*child:index:), head_dimension: * sin(60*child:index:), length_cylinder: + height_wedge:)+(start_point: - point(0,0,0)); 
 };
 
 (Child) cylinder: {
-    Class,  ug_cylinder,
+    Class,  ug_cylinder;
     Origin, point(0, 0, height_wedge:) + (start_point: - point(0,0,0));
     Diameter, diameter:;
     Direction, direction:;
@@ -47,7 +54,7 @@ DefClass: lag_screw_zzz (ug_base_part);
 (Child) wedge: 
 { 
     Class, ug_cone; 
-    Base_Diameter, 0.1; 
+    Base_Diameter, 0.01*diameter:; 
     Top_Diameter, diameter:; 
     Direction, direction:; 
     Height, height_wedge:;
@@ -56,68 +63,87 @@ DefClass: lag_screw_zzz (ug_base_part);
 
 (list) ex_points_zzz: loop
 {
-  for $n from 0 to num_point_total: -1;
-    for $delta_theta is (360*turn:) / (num_point_total: -1);
-    for $delta_z is (length_thread: +3)/ (num_point_total: -1); # +1 for the staring end of the thread
-    for $pt is Point(diameter:/2 *cos($n*$delta_theta), diameter:/2 *sin($n*$delta_theta), height_wedge:-1.5+$n*$delta_z)+ (start_point: - point(0,0,0));
+    for $n from 0 to num_point_total: -1;
+    for $delta_theta is 360*(turn: + turn_extra:) / (num_point_total: -1);              # extra turn for starting end of the substraction, or the cylinder disappears
+    for $delta_z is (length_thread: + turn_extra:* pitch:)/ (num_point_total: -1);  # extra turn for starting end of the substraction, or the cylinder disappears
+    for $pt is Point(diameter:/2 *cos($n*$delta_theta), diameter:/2 *sin($n*$delta_theta), -turn_extra:* pitch: +$n*$delta_z) + (start_point: - point(0,0,0));
 #    do printValue($pt);
     collect {$pt};
 };
 
 (Child) ex_spline_cntl: {
-    Class,          ug_spline_cntl,
-    Points,         ex_points_zzz:     
+    Class,          ug_spline_cntl;
+    Points,         ex_points_zzz:;
 };
 
 (child) line1: { 
     Class, ug_line; 
-    Start_Point, point(diameter:/2-pitch:/2*1.732,0,0)+vector(0,0,height_wedge:-2.5) + (start_point: - point(0,0,0)); 
-    End_Point, point(diameter:/2+1.732, 0, pitch:/2+1)+vector(0,0,height_wedge:-2.5) + (start_point: - point(0,0,0));  
+    Start_Point,    point(diameter:/2 + pitch:/4*sin(60), 0, pitch:/8) + vector(-cut_depth:, 0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
+    End_Point,      point(diameter:/2 + pitch:/4*sin(60), 0, -pitch:/8) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
 };
 
 (child) line2: { 
     Class, ug_line; 
-    Start_Point, point(diameter:/2+1.732, 0, pitch:/2+1)+vector(0,0,height_wedge:-2.5)+ (start_point: - point(0,0,0)); 
-    End_Point, point(diameter:/2+1.732, 0, -pitch:/2-1)+vector(0,0,height_wedge:-2.5) + (start_point: - point(0,0,0));  
+    Start_Point,    point(diameter:/2 + pitch:/4*sin(60), 0, -pitch:/8) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
+    End_Point,      point(diameter:/2 + pitch:*sin(60), 0, -pitch:/2) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
 };
 
 (child) line3: { 
     Class, ug_line; 
-    Start_Point, point(diameter:/2+1.732, 0, -pitch:/2-1)+vector(0,0,height_wedge:-2.5) + (start_point: - point(0,0,0)); 
-    End_Point, point(diameter:/2-pitch:/2*1.732,0,0)+vector(0,0,height_wedge:-2.5) + (start_point: - point(0,0,0)); 
+    Start_Point,    point(diameter:/2 + pitch:*sin(60), 0, -pitch:/2) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
+    End_Point,      point(diameter:/2 + pitch:*sin(60), 0, pitch:/2) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
+};
+
+(child) line4: { 
+    Class, ug_line; 
+    Start_Point,    point(diameter:/2 + pitch:*sin(60), 0, pitch:/2) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
+    End_Point,      point(diameter:/2 + pitch:/4*sin(60), 0, pitch:/8) + vector(-cut_depth:,0, -turn_extra:*pitch:) + (start_point: - point(0,0,0)); 
 };
 
 (child) thread_profile: {
   Class, ug_curve_join;
-  profile, {line1:, line2:, line3:};
-  #join_method, POLYNOMIAL;
+  profile, {line1:, line2:, line3:, line4:};
   Suppress_Children?, true;
 };
 
 (child) threads: {
-  class, ug_swept;
-  guide, {{forward, ex_spline_cntl:}};
-  section, {{forward, thread_profile:}};
-  scaling, {scale_constant, 1};
-  alignment_init, Parameter;
-  orientation, {Orientation_Vector , direction:};
-  Body_Type, Solid;
-  
-  tolerances, {0, 0, 0};
-  Operation, Subtract;
-  target, {cylinder:};
+    class, ug_swept;
+    guide, {{forward, ex_spline_cntl:}};
+    section, {{forward, thread_profile:}};
+    scaling, {scale_constant, 1};
+    alignment_init, Parameter;
+    orientation, {Orientation_Vector , direction:};
+#    orientation, {Orientation_Vector , Vector(0,0,1)};
+#    orientation, {Orientation_Fixed};
+#    orientation, {Orientation_Curve, {forward, ex_spline_cntl:}};
+    Body_Type, Solid;
+
+    tolerances, {0.01*diameter:, 0, 0};     #very important, or the swepted will be distorted
+    Operation, Subtract;
+    target, {cylinder:};
 };
 
-(child) threads1: {
-  class, ug_swept;
-  guide, {{forward, ex_spline_cntl:}};
-  section, {{forward, thread_profile:}};
-  scaling, {scale_constant, 1};
-  alignment_init, Parameter;
-  orientation, {Orientation_Vector , direction:};
-  Body_Type, Solid;
-  
-  tolerances, {0, 0, 0};
-  Operation, Subtract;
-  target, {wedge:};
+(child) threads_wedge: {
+    class, ug_swept;
+    guide, {{forward, ex_spline_cntl:}};
+    section, {{forward, thread_profile:}};
+    scaling, {scale_constant, 1};
+    alignment_init, Parameter;
+    orientation, {Orientation_Vector , direction:};
+    Body_Type, Solid;
+
+    tolerances, {0.01*diameter:, 0, 0};     #very important, or the swepted will be distorted
+    Operation, Subtract;
+    target, {wedge:};
+};
+
+# Methods of the class
+(Method Number) getIndex:(list $lst, Number $ToCheck) 
+@{
+    Loop {
+        for $index from 1 to 1000; 
+        for $a is nth($index, $lst);
+        if ( $a = $ToCheck ) return $index;
+        return is -1;
+    };
 };

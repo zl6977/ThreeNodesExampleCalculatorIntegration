@@ -16,7 +16,8 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
     (number parameter) connection_capacity: <connection_capacity>;
     (number parameter) connection_requirement: <connection_requirement>;
 
-    (number parameter) diameter: <fast_dia>;
+    (number parameter) bolt_diameter: <fast_dia>;
+    (number parameter) bolt_length: (Th_1: + Th_2:)*1.23 ;
 
 (Child) board1: {
     class, ug_block;
@@ -37,7 +38,7 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
 (Child) holes1: {
     Class,  ug_cylinder;
     Origin, connect_point:;
-    Diameter, diameter:;
+    Diameter, bolt_diameter:;
     Direction, -direction:;
     Height, Th_1: + Th_2:;
     Operation, Subtract;
@@ -47,7 +48,7 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
 (Child) holes2: {
     Class,  ug_cylinder;
     Origin, connect_point:;
-    Diameter, diameter:;
+    Diameter, bolt_diameter:;
     Direction, -direction:;
     Height, Th_1: + Th_2:;
     Operation, Subtract;
@@ -56,15 +57,15 @@ DefClass: twoBoardToConnect_bolt (ug_base_part);
 
 (Child) bolt: {
     Class,  <bolt_type>;
-    start_point, connect_point: - vector(0,0, 1.2*(Th_1: + Th_2:));
-    Diameter, diameter:;
-    length_cylinder, (Th_1: + Th_2:)*1.2 ;
+    start_point, connect_point: - vector(0,0, bolt_length:);
+    Diameter, bolt_diameter:;
+    length_cylinder, bolt_length:;
 };
 
 (Child) nut: {
     Class,  <nut_type>;
-    start_point, connect_point: - vector(0,0, 1.22*(Th_1: + Th_2:));
-};    
+    start_point, connect_point: - vector(0,0, (Th_1: + Th_2:) + bolt_diameter:*0.92);
+};
 
 (Child) body_colored: {
     Class, ug_body; 
