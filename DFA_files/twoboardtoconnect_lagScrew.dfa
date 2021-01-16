@@ -19,7 +19,10 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     (number parameter) diameter_cylinder: 0.25;
     (number parameter) length_cylinder: 2.0;
     (number parameter) length_thread: length_cylinder:/3*2;
-    (number parameter) height_wedge: 5;
+    (number parameter) height_wedge: 0.5;
+    
+    (number parameter) outter_dia_washer: 2*diameter_cylinder:;
+    (number parameter) inner_dia_washer: diameter_cylinder:;
     (number parameter) thickness_washer: 0.125;
 
 (Child) board1: {
@@ -38,7 +41,6 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     origin, point(0, 0, Th_1:) + (start_point: - point(0,0,0));
 };
 
-(Child) holes1: {
 (Child) hole1: {
     Class,  ug_cylinder;
     Origin, connect_point:;
@@ -49,7 +51,6 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     target, {board1:};    
 };
 
-(Child) holes2: {
 (Child) hole2: {
     Class,  ug_cylinder;
     Origin, connect_point:;

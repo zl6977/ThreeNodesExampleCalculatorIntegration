@@ -1,7 +1,7 @@
 #! NX/KF 10.0
 DefClass: bolt_zzz (ug_base_part);
 
-(number parameter) diameter: 0.25;                      #!!! input from template
+(number parameter) diameter: 0.625;                      #!!! input from template
 
 (number parameter) length_cylinder: 10*diameter:;       #!!! input from template
 (number parameter) head_thickness: nth(getIndex:(diameter_list:, diameter:), head_thickness_list:);
@@ -62,7 +62,7 @@ DefClass: bolt_zzz (ug_base_part);
 
 (Child) ex_spline_cntl: {
     Class,          ug_spline_cntl,
-    Points,         ex_points_zzz:     
+    Points,         ex_points_zzz:
 };
 
 #(child) circle_sec_o: { 
