@@ -1,7 +1,7 @@
 #! NX/KF 10.0
 DefClass: nut_zzz (ug_base_part);
 
-(number parameter) diameter: 0.25;             #!!! input from template
+(number parameter) diameter: 0.625;             #!!! input from template
 
 (number parameter) head_thickness: nth(getIndex:(diameter_list:, diameter:), head_thickness_list:);
 (number parameter) width_across_flats: nth(getIndex:(diameter_list:, diameter:), width_across_flats_list:);
