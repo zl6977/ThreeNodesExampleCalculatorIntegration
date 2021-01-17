@@ -4,46 +4,7 @@ from ConnectionClass import ConnectionClass_zzz
 
 #later, define and input a class containing the parameters of the 2 boards 
 class External_calculator_zzz(ConnectionClass_zzz):
-    # design_method="ASD"         #zl: allowable stress design. will not change in this example
-    # connection_type="Lateral+loading"   #zl: withdrawal loading. will not change in this example
-    
-    # #the two boards
-    # mm_type="Alaska+Cedar"      #zl: different types decide different density. will not change in this example
-    # mm_thickness="-1"           #"-1" means user-define value. will not change in this example
-    # mm_thickness_text="11"
-    # theta_angle_mm="0"          #angle between grain and load. will not change in this example
-    # sm_type="Alaska+Cedar"
-    # sm_thickness="-1"           #"-1" means user-define value. will not change in this example
-    # sm_thickness_text="10"
-    
-    # #connection way
-    # fastener_types="Bolt"       #Bolt, Lag+Screw, Wood+Screw, Nail
-    # loading_scenario="Single+Shear" #"Single+Shear" for default. will not change in this example
-    
-    # #load condition
-    # load_duration="1.0"         #will not change in this example
-    # wet_svc_factor="1.0"        #will not change in this example
-    # temperature="1.0"           #will not change in this example
-    # submit2_keywords="Calculate+Connection+Capacity"    #will not change in this example
-
     URL = "https://www.awc.org/calculators/connectioncalc.160106/ccstyle.asp?"
-    # defining a query params
-    # PARAMS = "design_method=ASD&connection_type=Lateral+loading&fastener_types=Bolt&loading_scenario=Single+Shear&mm_type=Glulam+AC&mm_thickness=2.5&mm_thickness_text=&theta_angle_mm=0&sm_type=Steel&sm_thickness=0.25&sm_thickness_text=&fast_dia=0.5&load_duration=1.0&wet_svc_factor=1.0&temperature=1.0&submit2_LBS=Calculate+Connection+Capacity"
-
-    #set the variables according to input class
-    # def __init__(self):
-        # if self.fastener_types == "Bolt":
-        
-        # elif self.fastener_types == "Lag+Screw":
-        
-        # elif self.fastener_types == "Wood+Screw":
-        
-        # elif self.fastener_types == "Nail":
-        
-        # else:
-            # print("fastener_types error")
-            # pass
-    
     def generate_para_bolt(self):
         PARAMS = ""
         PARAMS += "design_method="+ self.design_method + "&"

@@ -1,6 +1,3 @@
-# import requests
-# import bs4
-
 #this is a partial-capacity verision of the origianl calculator, so only parts of the variables are considered
 #define and input a class containing the parameters of the 2 boards
 class ConnectionClass_zzz():

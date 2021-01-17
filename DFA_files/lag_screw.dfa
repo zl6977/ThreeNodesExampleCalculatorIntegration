@@ -1,22 +1,22 @@
 #! NX/KF 10.0
 DefClass: lag_screw_zzz (ug_base_part);
 (number parameter) diameter: 0.25;                          #!!! input from template
-(number parameter) length_toltal: 10*diameter:;             #!!! input from template
+(number parameter) length_total: 10*diameter:;             #!!! input from template
 (number parameter) height_wedge: diameter: *sin(60);
-(number parameter) length_cylinder: length_toltal: - height_wedge:;
-(number parameter) length_thread: length_toltal:/4*3;
+(number parameter) length_cylinder: length_total: - height_wedge:;
+(number parameter) length_thread: length_total:/4*3;
 
 (vector parameter) direction: vector(0,0,1);
 (point parameter) start_point: point(0,0,0);
 
 (number parameter) head_thickness: nth(getIndex:(diameter_list:, diameter:), head_thickness_list:);
 (number parameter) width_across_flats: nth(getIndex:(diameter_list:, diameter:), width_across_flats_list:);
-(number parameter) head_dimension: width_across_flats: /2 /sin(60) ;
+(number parameter) head_dimension: width_across_flats: /tan(60) ;
 
 (number parameter) threads_per_inch: nth(getIndex:(diameter_list:, diameter:), threads_per_inch_list:);
 (number parameter) pitch: 1/threads_per_inch:;
 (number parameter) turn: length_thread:/pitch:;
-(integer parameter) num_point_total: round(200*turn:);
+(integer parameter) num_point_total: round(100*turn:);
 (number parameter) turn_extra: 0.5;
 (number parameter) cut_depth: pitch:*sin(60)-pitch:/8*sin(60);
 

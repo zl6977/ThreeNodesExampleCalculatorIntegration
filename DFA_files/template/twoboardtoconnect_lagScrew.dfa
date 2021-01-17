@@ -2,7 +2,7 @@
 DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 #CSYS
 (vector parameter) direction: vector(0,0,1);
-(point parameter) start_point: point(0,0,0);
+(point parameter) start_point: point(10,0,0);
 #the dimensions of the 2 boards
     (number parameter) L_1: <mm_length>;
     (number parameter) W_1: <mm_width>;
@@ -11,15 +11,13 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     (number parameter) W_2: <sm_width>;
     (number parameter) Th_2: <sm_thickness_text>;
 #the position to connect
-    (point parameter) connect_point: point(min(L_1:, L_2:)/2,min(W_1:, W_2:)/2,Th_1: + Th_2:);
+    (point parameter) connect_point: point(min(L_1:, L_2:)/2,min(W_1:, W_2:)/2,Th_1: + Th_2:) + (start_point: - point(0,0,0));
 #the required mechanical performance 
     (number parameter) connection_capacity: <connection_capacity>;
     (number parameter) connection_requirement: <connection_requirement>;
     
     (number parameter) diameter_cylinder: <diameter_lag_screw>;
-    (number parameter) length_cylinder: <ls_length_08>;
-    (number parameter) length_thread: length_cylinder:/3*2;
-    (number parameter) height_wedge: <ls_length_02>;
+    (number parameter) length_lagscrew: <ls_length>;
     
     (number parameter) outter_dia_washer: 2*diameter_cylinder:;
     (number parameter) inner_dia_washer: diameter_cylinder:;
@@ -46,7 +44,7 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     Origin, connect_point:;
     Diameter, diameter_cylinder:;
     Direction, -direction:;
-    Height, length_cylinder:;
+    Height, length_lagscrew:;
     Operation, Subtract;
     target, {board1:};    
 };
@@ -63,11 +61,9 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
 
 (Child) lag_screw: {
     Class, lag_screw_zzz;
-    start_point, connect_point:-vector(0,0, length_cylinder: + height_wedge: - thickness_washer:);
+    start_point, connect_point:-vector(0,0, length_lagscrew: - thickness_washer:);
     diameter, diameter_cylinder:;
-    length_cylinder, length_cylinder:;
-    length_thread, length_thread:;
-    height_wedge, height_wedge:;
+    length_total, length_lagscrew:;
 };
 
 (Child) washer: {
@@ -86,4 +82,12 @@ DefClass: twoboardtoconnect_lagScrew (ug_base_part);
     Direction, direction:;
     Operation, Subtract;
     target, {washer:};
+};
+
+(Child) body_colored: {
+    Class, ug_body; 
+    Feature, {board2:};
+    color,  if(connection_capacity: < connection_requirement:) then ug_askClosestColor(RED) 
+       else if(connection_capacity: > connection_requirement:) then ug_askClosestColor(GREEN)
+       else ug_askClosestColor(YELLOW); 
 };
