@@ -3,8 +3,8 @@
 class ConnectionClass_zzz():
     design_method="ASD"         #zl: allowable stress design. will not change in this example
     connection_type="Lateral+loading"   #zl: withdrawal loading. will not change in this example
-    connection_capacity="0.1"      #labs.
-    connection_requirement="1"   #labs.
+    connection_capacity="0.1"      #lbs.
+    connection_requirement="1"   #lbs.
     
     #the two boards
     mm_type="Alaska+Cedar"      #zl: different types have different density. will not change in this example
