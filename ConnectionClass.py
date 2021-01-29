@@ -12,7 +12,7 @@ class ConnectionClass_zzz():
     mm_thickness_text="1"       #inch  *IMPORTANT*
     theta_angle_mm="0"          #angle between grain and load. will not change in this example
     theta_angle_sm="0"          #angle between grain and load. will not change in this example
-    sm_type="Alaska+Cedar"      #inch
+    sm_type="Alaska+Cedar"      #zl: different types have different density. will not change in this example
     sm_thickness="-1"           #"-1" means user-define value. will not change in this example
     sm_thickness_text="1"       #inch  *IMPORTANT*
     mm_length="10"                #inch  *IMPORTANT* zl added

@@ -2,7 +2,7 @@
 DefClass: twoBoardToConnect_nail (ug_base_part);
 #CSYS
 (vector parameter) direction: vector(0,0,1);
-(point parameter) start_point: point(20,0,0);
+(point parameter) start_point: point(30,0,0);
 #the dimensions of the 2 boards
     (number parameter) L_1: <mm_length>;
     (number parameter) W_1: <mm_width>;

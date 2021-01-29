@@ -5,8 +5,9 @@ if __name__ == "__main__":
     instance=External_calculator_zzz()
 
     #connection way
-    instance.fastener_types="Wood+Screw"        #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
+    instance.fastener_types="Lag+Screw"        #Bolt, Lag+Screw, Wood+Screw, Nail  *IMPORTANT*
     instance.loading_scenario="Single+Shear"    #"Single+Shear" for default. will not change in this example
+    instance.connection_requirement = "10"
     #parameters about fastner, only modify the related is enough
     instance.ConnectionBlot.fast_dia="0.5"          #inch *IMPORTANT*  0.25, 0.3125, 0.375, 0.4375, 0.5, 0.625, 0.75, 0.875, 1
     
@@ -39,7 +40,7 @@ if __name__ == "__main__":
     instance.wet_svc_factor="1.0"        #will not change in this example
     instance.temperature="1.0"           #will not change in this example
     instance.submit2_keywords="Calculate+Connection+Capacity"    #will not change in this example
-
+    
     print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.update_Adjusted_ASD_Capacity(),2), "kg")
     print("The Adjusted_ASD_Capacity of", str(instance.fastener_types), ":", round(instance.update_Adjusted_ASD_Capacity()/0.45359237,2), "lbs")
     DFA_gen.updateTemplate(instance)
